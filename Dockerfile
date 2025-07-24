@@ -20,7 +20,7 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Copy application files
 COPY src/ ./src/
-COPY .env ./
+COPY .env.example ./.env
 
 # Create index.php in document root that includes the actual index.php
 RUN echo '<?php require_once "src/index.php";' > index.php

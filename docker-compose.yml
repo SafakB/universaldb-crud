@@ -8,14 +8,23 @@ services:
     depends_on:
       - db
     environment:
-      - DB_HOST=db
+      - DB_DRIVER=mysql
+      - DB_ADDRESS=db
       - DB_PORT=3306
-      - DB_NAME=universaldb
-      - DB_USER=root
-      - DB_PASS=rootpassword
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword
+      - DB_DATABASE=universaldb
+      - DB_DEBUG=true
+      - API_MIDDLEWARES=cors
+      - API_CONTROLLERS=records,geojson,openapi,status
+      - PHP_CRUD_API_APIKEYAUTH_KEYS=your-secret-api-key-1,your-secret-api-key-2
+      - PHP_CRUD_API_APIKEYAUTH_HEADER=X-API-Key
+      - PHP_CRUD_API_APIKEYAUTH_MODE=required
+      - JWT_AUTH_SECRET=29ef3ac5b01f9a9b86db122dd3a729d7170b3893e0d6ac79ababa6a017538f450810dabe
+      - JWT_AUTH_HEADER=X-Authorization
+      - JWT_AUTH_MODE=required
     volumes:
       - ./src:/var/www/html/src
-      - ./.env:/var/www/html/.env
     networks:
       - app-network
 
