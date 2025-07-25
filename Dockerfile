@@ -16,18 +16,16 @@ RUN a2enmod rewrite
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy composer files
+# Copy composer files and source code first
 COPY composer.json composer.lock ./
+COPY src/ ./src/
+COPY .env.example ./.env
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
-
-# Copy application files
-COPY src/ ./src/
-COPY .env.example ./.env
 
 # Create index.php in document root that includes the actual index.php
 RUN echo '<?php require_once "src/index.php";' > index.php
