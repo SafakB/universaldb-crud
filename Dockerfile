@@ -9,5 +9,7 @@ RUN apt-get update; \
 
 RUN a2enmod rewrite
 
+COPY composer.json composer.lock /var/www/html/
+WORKDIR /var/www/html
+RUN composer install --no-interaction --no-dev --optimize-autoloader
 COPY src/ /var/www/html/
-#COPY .htaccess /var/www/html/.htaccess
