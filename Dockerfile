@@ -9,5 +9,5 @@ RUN apt-get update; \
 
 RUN a2enmod rewrite
 
-COPY api.php /var/www/html/api.php
+COPY src/ /var/www/html/
 COPY .htaccess /var/www/html/.htaccess
