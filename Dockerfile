@@ -21,7 +21,8 @@ COPY . /var/www/html/
 
 # Bağımlılıkları yükle
 WORKDIR /var/www/html
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader \
+    && composer dump-autoload
 
 # Apache rewrite modu aç
 RUN a2enmod rewrite
