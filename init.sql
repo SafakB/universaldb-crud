@@ -1,3 +1,5 @@
+
+SET FOREIGN_KEY_CHECKS=0;
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
@@ -120,6 +122,16 @@ CREATE TABLE IF NOT EXISTS `articles` (
 -- Tablo döküm verisi `articles`
 --
 
+
+-- --------------------------------------------------------
+-- Gerekli authors verisi eklendi
+INSERT INTO authors (id, username, email, password_hash, first_name, last_name)
+VALUES
+(1, 'user1', 'user1@example.com', 'pass', 'User', 'One'),
+(2, 'user2', 'user2@example.com', 'pass', 'User', 'Two'),
+(3, 'user3', 'user3@example.com', 'pass', 'User', 'Three'),
+(4, 'user4', 'user4@example.com', 'pass', 'User', 'Four'),
+(5, 'user5', 'user5@example.com', 'pass', 'User', 'Five');
 INSERT INTO `articles` (`id`, `title`, `slug`, `summary`, `content`, `featured_image`, `author_id`, `primary_category_id`, `status`, `is_featured`, `is_breaking`, `view_count`, `like_count`, `comment_count`, `published_at`, `scheduled_at`, `meta_title`, `meta_description`, `meta_keywords`, `reading_time`, `word_count`, `created_at`, `updated_at`) VALUES
 (1, 'Mahkeme yeni bir karar açıkladı', 'makale-1', 'Mahkeme tarafından açıklanan yeni karar gündemde büyük ses getirdi.', 'Olayların gelişimiyle ilgili detaylar şu şekilde...', '/uploads/image_1.jpg', 2, 4, 'published', 0, 1, 601, 142, 36, '2025-06-08 22:01:43', NULL, 'Mahkeme yeni bir karar açıkladı - Haber Sitesi', 'Haberin detayı ve etkileri hakkında bilgiler...', 'yeni,karar,gündem,mahkeme,açıklama', 2, 553, '2025-07-24 07:57:47', '2025-07-24 08:14:32'),
 (2, 'Teknoloji devi yeni ürününü tanıttı', 'makale-2', 'Yeni ürün tanıtımı teknoloji dünyasında heyecan yarattı.', 'Tanıtım sırasında özellikler şöyle özetlendi...', '/uploads/image_2.jpg', 1, 3, 'published', 0, 0, 145, 43, 13, '2025-06-18 22:01:43', NULL, 'Teknoloji devi yeni ürününü tanıttı - Haber Sitesi', 'Ürün detayları ve değerlendirmeler burada...', 'teknoloji,yeni,ürün,özellik,inceleme', 4, 631, '2025-07-24 07:57:47', '2025-07-24 07:57:47'),
@@ -649,3 +661,5 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+SET FOREIGN_KEY_CHECKS=1;
