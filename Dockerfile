@@ -1,19 +1,18 @@
-# Temel PHP görüntüsü (Apache ile)
 FROM php:8.2-apache
 
-# Gerekli PHP eklentilerini kur
+# Gerekli sistem ve PHP bağımlılıklarını yükle
 RUN apt-get update && apt-get install -y \
     unzip \
     git \
+    libonig-dev \
     && docker-php-ext-install pdo pdo_mysql mbstring
 
-# Composer kur
+# Composer'ı yükle
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Apache için belge kökünü ayarla
+# Apache doküman kökünü ayarla
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/src
 
-# Apache ayarını güncelle (public dizinin dışında çalışıyorsan)
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
