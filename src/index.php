@@ -77,10 +77,9 @@ $config = new Config([
     #'apiKeyAuth.keys' => $_ENV['PHP_CRUD_API_APIKEYAUTH_KEYS'] ?? '',
     #'apiKeyAuth.header' => $_ENV['PHP_CRUD_API_APIKEYAUTH_HEADER'] ?? 'X-API-Key',
     #'apiKeyAuth.mode' => $_ENV['PHP_CRUD_API_APIKEYAUTH_MODE'] ?? 'required',
-
-    #'jwtAuth.secrets' => $_ENV['JWT_AUTH_SECRET'] ?? '',
-    #'jwtAuth.header' => $_ENV['JWT_AUTH_HEADER'] ?? 'X-Authorization',
-    #'jwtAuth.mode' => $_ENV['JWT_AUTH_MODE'] ?? 'required',
+    'jwtAuth.secrets' => $_ENV['JWT_AUTH_SECRET'] ?? '',
+    'jwtAuth.header' => $_ENV['JWT_AUTH_HEADER'] ?? 'X-Authorization',
+    'jwtAuth.mode' => $_ENV['JWT_AUTH_MODE'] ?? 'required',
 
 ]);
 $request = RequestFactory::fromGlobals();
