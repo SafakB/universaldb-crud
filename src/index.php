@@ -7,6 +7,7 @@ use Tqdev\PhpCrudApi\Config\Config;
 use Tqdev\PhpCrudApi\RequestFactory;
 use Tqdev\PhpCrudApi\ResponseUtils;
 
+require '../vendor/autoload.php';
 // Load environment variables from .env file
 function loadEnv($path)
 {
