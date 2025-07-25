@@ -7,6 +7,7 @@ use Tqdev\PhpCrudApi\Config\Config;
 use Tqdev\PhpCrudApi\RequestFactory;
 use Tqdev\PhpCrudApi\ResponseUtils;
 
+
 $autoload = realpath(__DIR__ . '/../vendor/autoload.php');
 if ($autoload) {
     require_once $autoload;
@@ -52,7 +53,7 @@ $config = new Config([
     'command' => $_ENV['DB_COMMAND'] ?? '',
     'debug' => filter_var($_ENV['DB_DEBUG'] ?? 'false', FILTER_VALIDATE_BOOLEAN),
     'mapping' => $_ENV['DB_MAPPING'] ?? '',
-    'tables' => $_ENV['DB_TABLES'] ?? 'all',
+    'tables' => getTablesFromJwt() ?? $_ENV['DB_TABLES'] ?? 'all',
 
     // API Configuration
     'middlewares' => $_ENV['API_MIDDLEWARES'] ?? 'cors',
@@ -82,6 +83,52 @@ $config = new Config([
     'jwtAuth.mode' => $_ENV['JWT_AUTH_MODE'] ?? 'required',
 
 ]);
+
+function getTablesFromJwt()
+{
+    $jwt = null;
+    $header = $_ENV['JWT_AUTH_HEADER'] ?? 'X-Authorization';
+
+    // Önce HTTP header'da token var mı kontrol et
+    if (isset($_SERVER['HTTP_' . str_replace('-', '_', strtoupper($header))])) {
+        $authHeader = $_SERVER['HTTP_' . str_replace('-', '_', strtoupper($header))];
+        if (preg_match('/Bearer\s((.*)\.(.*)\.(.*))/', $authHeader, $matches)) {
+            $jwt = $matches[1];
+        }
+    }
+
+    // Eğer HTTP header'da token varsa, onu çöz
+    if ($jwt) {
+        // Use simple JWT parsing like JwtAuthMiddleware does
+        $token = explode('.', $jwt);
+        if (count($token) >= 3) {
+            try {
+                $claims = json_decode(base64_decode(strtr($token[1], '-_', '+/')), true);
+                if ($claims && isset($claims['tables'])) {
+                    return $claims['tables'];
+                }
+            } catch (\Exception $e) {
+                // Handle malformed JWT tokens silently
+                error_log("JWT parsing error: " . $e->getMessage());
+            }
+        }
+    }
+
+    // HTTP header'da token yoksa, session'dan claims'i kontrol et
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (isset($_SESSION['claims']) && !empty($_SESSION['claims'])) {
+        $claims = $_SESSION['claims'];
+        if (isset($claims['tables'])) {
+            return $claims['tables'];
+        }
+    }
+
+    return null;
+}
+
 $request = RequestFactory::fromGlobals();
 $api = new Api($config);
 $response = $api->handle($request);
