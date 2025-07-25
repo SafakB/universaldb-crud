@@ -26,6 +26,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
+RUN composer dump-autoload --optimize
 
 # Create index.php in document root that includes the actual index.php
 RUN echo '<?php require_once "src/index.php";' > index.php
