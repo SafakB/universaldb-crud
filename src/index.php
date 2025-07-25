@@ -7,7 +7,14 @@ use Tqdev\PhpCrudApi\Config\Config;
 use Tqdev\PhpCrudApi\RequestFactory;
 use Tqdev\PhpCrudApi\ResponseUtils;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+$autoload = realpath(__DIR__ . '/../vendor/autoload.php');
+if ($autoload) {
+    require_once $autoload;
+} else {
+    http_response_code(500);
+    echo "Autoload file not found.";
+    exit;
+}
 // Load environment variables from .env file
 function loadEnv($path)
 {
