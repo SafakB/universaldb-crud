@@ -26,6 +26,9 @@ class JwtAuthMiddleware extends Middleware
             return array();
         }
         $header = json_decode(base64_decode(strtr($token[0], '-_', '+/')), true);
+        if (!$header) {
+            return array();
+        }
         $kid = 0;
         if (isset($header['kid'])) {
             $kid = $header['kid'];
@@ -34,7 +37,10 @@ class JwtAuthMiddleware extends Middleware
             return array();
         }
         $secret = $secrets[$kid];
-        if ($header['typ'] != 'JWT') {
+        if (!isset($header['typ']) || $header['typ'] != 'JWT') {
+            return array();
+        }
+        if (!isset($header['alg'])) {
             return array();
         }
         $algorithm = $header['alg'];
