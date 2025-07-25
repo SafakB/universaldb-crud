@@ -32,8 +32,8 @@ COPY .env.example ./.env
 # Create index.php in document root that includes the actual index.php
 RUN echo '<?php require_once "src/index.php";' > index.php
 
-# Create symlink for vendor directory so src/index.php can find it
-RUN ln -sf /var/www/html/vendor /var/www/html/src/../vendor
+# Fix vendor autoload path in src/index.php for Docker environment
+RUN sed -i "s|require '../vendor/autoload.php';|require '/var/www/html/vendor/autoload.php';|g" /var/www/html/src/index.php
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html
