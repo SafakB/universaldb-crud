@@ -42,7 +42,8 @@ function loadEnv($path)
 // Load .env file
 loadEnv(__DIR__ . '/../.env');
 
-$config = new Config([
+// Base configuration
+$configArray = [
     // Database Configuration
     'driver' => $_ENV['DB_DRIVER'] ?? 'mysql',
     'address' => $_ENV['DB_ADDRESS'] ?? 'localhost',
@@ -75,14 +76,26 @@ $config = new Config([
     'geometrySrid' => (int)($_ENV['GEOMETRY_SRID'] ?? 4326),
 
     //Auth Configuration
-    #'apiKeyAuth.keys' => $_ENV['PHP_CRUD_API_APIKEYAUTH_KEYS'] ?? '',
-    #'apiKeyAuth.header' => $_ENV['PHP_CRUD_API_APIKEYAUTH_HEADER'] ?? 'X-API-Key',
-    #'apiKeyAuth.mode' => $_ENV['PHP_CRUD_API_APIKEYAUTH_MODE'] ?? 'required',
-    'jwtAuth.secrets' => $_ENV['JWT_AUTH_SECRET'] ?? '',
-    'jwtAuth.header' => $_ENV['JWT_AUTH_HEADER'] ?? 'X-Authorization',
-    'jwtAuth.mode' => $_ENV['JWT_AUTH_MODE'] ?? 'required',
+];
 
-]);
+// Add middleware-specific configurations only if they are enabled
+$middlewares = $_ENV['API_MIDDLEWARES'] ?? 'cors';
+
+// Add JWT configuration only if jwtAuth middleware is enabled
+if (strpos($middlewares, 'jwtAuth') !== false) {
+    $configArray['jwtAuth.secrets'] = $_ENV['JWT_AUTH_SECRET'] ?? '';
+    $configArray['jwtAuth.header'] = $_ENV['JWT_AUTH_HEADER'] ?? 'X-Authorization';
+    $configArray['jwtAuth.mode'] = $_ENV['JWT_AUTH_MODE'] ?? 'required';
+}
+
+// Add API Key configuration only if apiKeyAuth middleware is enabled
+if (strpos($middlewares, 'apiKeyAuth') !== false) {
+    $configArray['apiKeyAuth.keys'] = $_ENV['PHP_CRUD_API_APIKEYAUTH_KEYS'] ?? '';
+    $configArray['apiKeyAuth.header'] = $_ENV['PHP_CRUD_API_APIKEYAUTH_HEADER'] ?? 'X-API-Key';
+    $configArray['apiKeyAuth.mode'] = $_ENV['PHP_CRUD_API_APIKEYAUTH_MODE'] ?? 'required';
+}
+
+$config = new Config($configArray);
 
 function getTablesFromJwt()
 {
