@@ -76,6 +76,14 @@ $configArray = [
     'geometrySrid' => (int)($_ENV['GEOMETRY_SRID'] ?? 4326),
 
     //Auth Configuration
+
+    // Authorization Configuration
+    'authorization.columnHandler' => function ($operation, $tableName, $columnName) {
+        if ($tableName == "users" && $columnName == "password") {
+            return false;
+        }
+        return true;
+    }
 ];
 
 // Add middleware-specific configurations only if they are enabled
