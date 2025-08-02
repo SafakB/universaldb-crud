@@ -78,12 +78,12 @@ $configArray = [
     //Auth Configuration
 
     // Authorization Configuration
-    'authorization.columnHandler' => function ($operation, $tableName, $columnName) {
-        if ($tableName == "users" && $columnName == "password") {
-            return false;
-        }
-        return true;
-    }
+    // 'authorization.columnHandler' => function ($operation, $tableName, $columnName) {
+    //     if ($tableName == "users" && $columnName == "password") {
+    //         return false;
+    //     }
+    //     return true;
+    // }
 ];
 
 // Add middleware-specific configurations only if they are enabled
